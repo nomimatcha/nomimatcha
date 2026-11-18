@@ -20,8 +20,20 @@ window.NM_HE_RULES=[[new RegExp("^Cart, (\\d+) items?$"),function(m,n){return '�
     location.reload()}
   api.set=setLang;
 
+  /* small globe button in the nav bar (.tools) that flips EN <-> HE; added on every page that has the standard nav */
+  function addLangBtn(){
+    var t=document.querySelector('.bar .tools, header .tools'); if(!t||document.getElementById('nm-lbtn')||!t.querySelector('.ic')) return;
+    var b=document.createElement('button'); b.type='button'; b.id='nm-lbtn'; b.className='ic';
+    var lbl=lang==='he'?'Switch language to English':'Switch language to Hebrew';
+    b.setAttribute('aria-label',lang==='he'?'החלפת שפה לאנגלית':lbl); b.title=b.getAttribute('aria-label');
+    b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2"/><path d="M12 3.4c2.3 2.4 3.5 5.3 3.5 8.6s-1.2 6.2-3.5 8.6c-2.3-2.4-3.5-5.3-3.5-8.6s1.2-6.2 3.5-8.6z"/></svg>';
+    b.addEventListener('click',function(){setLang(lang==='he'?'en':'he')});
+    t.insertBefore(b,t.firstChild);
+  }
+
   /* language switches that already exist in the markup (.d-lang in the menu, .f-lang in the footer) */
   function wireSwitch(){
+    addLangBtn();
     var sw=document.querySelectorAll('.d-lang, .f-lang, [data-lang-switch]');
     for(var i=0;i<sw.length;i++){
       var as=sw[i].querySelectorAll('a'); if(as.length<2) continue;
