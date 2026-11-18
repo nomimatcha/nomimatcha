@@ -371,11 +371,8 @@ main{display:block}
 .sb .sn{display:flex; align-items:baseline; gap:10px; margin-inline-end:auto; min-width:0}
 .sb .sn b{font-size:22px; white-space:nowrap}
 .sb .sn .jp{font-size:16px; color:var(--pc); font-weight:700}
-.sb .ssz{display:flex}
-.sb .ssz button{padding:8px 12px; border:1.5px solid var(--ink); margin-inline-start:-1.5px; font-size:14px; font-weight:700; background:var(--paper)}
-.sb .ssz button.on{background:var(--ink); color:var(--paper)}
 .sb .add{flex:none; height:46px; margin:0; padding-inline:16px; min-width:200px}
-@media (max-width:700px){ .sb{top:auto; bottom:0; border-bottom:0; border-top:1.5px solid var(--ink); transform:translateY(130%)} .sb .sn .jp,.sb .ssz{display:none} .sb .add{min-width:0; flex:1} .sb .sn b{font-size:17px} .toast{bottom:84px} }
+@media (max-width:700px){ .sb{top:auto; bottom:0; border-bottom:0; border-top:1.5px solid var(--ink); transform:translateY(130%)} .sb .sn .jp{display:none} .sb .add{min-width:0; flex:1} .sb .sn b{font-size:17px} .toast{bottom:84px} }
 
 /* toast */
 .toast{position:fixed; z-index:260; inset-inline-end:16px; bottom:72px; max-width:min(360px,calc(100vw - 32px)); display:flex; gap:12px; align-items:center; padding:12px 14px; background:var(--ink); color:var(--paper); border:1.5px solid var(--paper); font-size:14px; font-weight:600; opacity:0; transform:translateY(12px); pointer-events:none; transition:opacity .25s, transform .3s}
@@ -1142,7 +1139,7 @@ function reveal(){
       t.addEventListener('animationend',function f(ev){ if(ev.target!==t) return; t.classList.add('srv-done'); t.removeEventListener('animationend',f) }) })},{threshold:.08,rootMargin:'0px 0px -5% 0px'});
   els.forEach(function(e){ e.style.setProperty('--sd',Math.min(e.parentNode._rn++,7)*70+'ms'); e.classList.add('srv'); rvIO.observe(e) });
 }
-function sticky(p){return '<div class="sb" id="sb" role="region" aria-label="Quick buy"><div class="sn"><b class="it">'+p.n+'</b><span class="jp">'+p.kj+'</span></div><div class="ssz">'+p.sizes.map(function(s,i){return '<button type="button" data-size="'+i+'">'+s.g+'</button>'}).join('')+'</div><button type="button" class="add" data-add>'+PLUS+'<span data-addt>Add to bag</span><b data-total></b></button></div>'}
+function sticky(p){return '<div class="sb" id="sb" role="region" aria-label="Quick buy"><div class="sn"><b class="it">'+p.n+'</b><span class="jp">'+p.kj+'</span></div><button type="button" class="add" data-add>'+PLUS+'<span data-addt>Add to bag</span><b data-total></b></button></div>'}
 function extras(){var p=cur(),list=[]; p.pair.forEach(function(id){if(S.bun[id]) list.push(ex(id))}); return list}
 function sync(){var p=cur(),sz=p.sizes[S.size],u=unit();
   $$('[data-size]').forEach(function(b){var on=+b.getAttribute('data-size')===S.size; b.classList.toggle('on',on); b.setAttribute('aria-checked',on)});
