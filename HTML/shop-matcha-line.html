@@ -208,7 +208,7 @@ main{display:block}
 .xtb .nm{flex:none; padding:0 12px 0 10px; font-size:12px; font-weight:600; white-space:nowrap; opacity:.9}
 .rv{animation:rise .8s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i,0) * .08s)}
 @keyframes rise{from{opacity:0; transform:translateY(22px)}to{opacity:1; transform:none}}
-@media (max-width:900px){ .v{flex-direction:column} .pn{flex:1 1 0 !important} .pn.t{border-inline-start:0; border-top:1.5px solid var(--ink)} }
+@media (max-width:640px){ .v{flex-direction:column} .pn{flex:1 1 0 !important} .pn.t{border-inline-start:0; border-top:1.5px solid var(--ink)} }   /* stacked only on a phone: 641px and up keeps the desktop side-by-side opening */
 /* mobile: the NM chip would sit under the big kanji in the stacked panels, so it is hidden */
 @media (max-width:640px){ .o3 .chip{display:none} }
 @media (prefers-reduced-motion:reduce){ .pn{transition:none} .oD .tape div{animation:none} .rv{animation:none} }

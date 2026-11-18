@@ -163,7 +163,7 @@ main{display:block}
 @keyframes stripin{from{opacity:1; transform:translateY(100%)}to{opacity:1; transform:none}}
 
 /* phones: 4 columns, the same tiles regrouped */
-@media (max-width:700px){
+@media (max-width:760px){
   .hero{--u:calc(100vw / 4)}
   .tiles{grid-template-columns:repeat(4,1fr)}
   .t{grid-column:var(--mc,var(--c)) / span var(--mcs,var(--cs,1)); grid-row:var(--mr,var(--r)) / span var(--mrs,var(--rs,1))}
@@ -273,8 +273,10 @@ main{display:block}
 .pn.in .go{transition:transform .6s cubic-bezier(.2,.9,.3,1.3) .25s, opacity .4s .25s}
 .pn.in .zone{transition:transform .9s cubic-bezier(.2,.8,.2,1) .15s, opacity .6s .15s}
 .pn .hd>div>*:nth-child(1){--k:0} .pn .hd>div>*:nth-child(2){--k:1}
-@media (max-width:700px){ .plat{height:64px; padding-inline:20px} .zone{top:calc(var(--bar-h) + var(--top-h) + 120px); bottom:64px} .vis{inset-inline:20px; bottom:34px} .info{inset-inline:20px; grid-template-columns:1fr 1fr; bottom:calc(0.4736 * 100cqw + 10px)} .info .cell{padding:8px 10px 0 0; margin-inline-end:10px} .info .cell.tcell{grid-column:1 / -1; border:0; margin:0; padding-top:6px; border-top:1.5px dashed var(--c); border-top-color:color-mix(in srgb,var(--c) 50%,transparent)} .info .v{font-size:15px} .tt .nm{font-size:10px; letter-spacing:.06em} .meter{width:56px; margin-top:6px} .taste{gap:10px 16px} }
+@media (max-width:760px){ .plat{height:64px; padding-inline:20px} .zone{top:calc(var(--bar-h) + var(--top-h) + 120px); bottom:64px} .vis{inset-inline:20px; bottom:34px} .info{inset-inline:20px; grid-template-columns:1fr 1fr; bottom:calc(0.4736 * 100cqw + 10px)} .info .cell{padding:8px 10px 0 0; margin-inline-end:10px} .info .cell.tcell{grid-column:1 / -1; border:0; margin:0; padding-top:6px; border-top:1.5px dashed var(--c); border-top-color:color-mix(in srgb,var(--c) 50%,transparent)} .info .v{font-size:15px} .tt .nm{font-size:10px; letter-spacing:.06em} .meter{width:56px; margin-top:6px} .taste{gap:10px 16px} }
 @media (max-width:640px){ .card{padding-inline:20px} .go{width:52px; height:52px} }
+/* a window narrower than ~560px (tablet widths: the window stays 380px) cannot hold three columns, the taste block's second column spilled out of the window and was cut. Same arrangement as the phone. */
+@container (max-width:560px){ .info{inset-inline:20px; grid-template-columns:1fr 1fr; bottom:calc(0.4736 * 100cqw + 10px)} .info .cell{padding:8px 10px 0 0; margin-inline-end:10px} .info .cell.tcell{grid-column:1 / -1; border:0; margin:0; padding-top:6px; border-top:1.5px dashed var(--c); border-top-color:color-mix(in srgb,var(--c) 50%,transparent)} .info .v{font-size:15px} .tt .nm{font-size:10px; letter-spacing:.06em} .meter{width:56px; margin-top:6px} .taste{gap:10px 16px} .vis{inset-inline:20px} }
 @media (prefers-reduced-motion:reduce){ .pn *{transition:none !important} .pn:not(.in) .hd>div>*,.pn:not(.in) .go{opacity:1; transform:none} .pn:not(.in) .zone{opacity:1; transform:none} }
 
 
@@ -406,8 +408,15 @@ main{display:block}
   .sp-pts>div{padding:12px 0; margin:0; border-inline-end:0; border-bottom:1.5px dashed rgba(26,44,39,.35)}
   .sp-pts>div:last-child{border-bottom:0}
   .sp-div{display:none}
-  .sp-med{grid-column:1; grid-row:3; border-top:1.5px solid var(--ink); grid-template-rows:0 repeat(4,46vw)}
+  .sp-med{grid-column:1; grid-row:3; border-top:1.5px solid var(--ink); grid-template-rows:0 repeat(4,min(46vw,180px))}
   .sp-band{display:none}
+}
+/* tablet (561-860): the three points sit in a row again instead of a tall stack */
+@media (min-width:561px) and (max-width:860px){
+  .sp-pts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sp-pts>div{padding:12px 0 0; padding-inline-end:14px; margin:0; margin-inline-end:14px; border-bottom:0; border-inline-end:1.5px dashed rgba(26,44,39,.35)}
+  .sp-pts>div:last-child{border-inline-end:0; margin-inline-end:0; padding-inline-end:0}
+  .sp-lede{font-size:15px; max-width:52ch}
 }
 @media (prefers-reduced-motion:reduce){ .sps *{animation:none !important} .sps .sp-rv,.sps .sp-cell{opacity:1 !important; transform:none !important} .sps .sp-pts::before{transform:none !important} }
 /* ---------- section 4: how to make matcha. An accordion of timetable rows on the left (each new step slides up and the earlier ones pile up as header rows); title, paragraph and the fixed recipe on the right ---------- */
@@ -562,8 +571,13 @@ main{display:block}
   html[data-hero=C] .hlay{display:block; position:absolute; inset:0; z-index:6; pointer-events:none; will-change:transform}   /* the powder and the shop tags are both cut where the strip starts, so a tag never covers the strip */
   html[data-hero=C] .mt{clip-path:inset(-5000px -5000px calc(var(--u) * 0.2338 + 84px) -5000px)}
   html[data-hero=C] .cw{position:absolute; inset:0; pointer-events:none; clip-path:inset(-5000px -5000px calc(var(--u) * 0.2338 + 84px) -5000px)}
-  html[data-hero=C] .fx{clip-path:inset(-5000px -5000px calc(var(--u) * 0.7074 + 84px) -5000px)}
-  html[data-hero=C] .hbx{position:absolute; left:calc(var(--u) * .35); top:calc(var(--bar-h) + var(--top-h) + 14px + var(--u) * .12); display:flex; flex-direction:column; align-items:flex-start; color:var(--paper-muted)}
+  /* in-between widths (tall, narrow windows): the powder mound grows into the free height under the tiles, up to ~1.6x. At desktop proportions the clamp returns the original size. */
+  html[data-hero=C] #s2{--mW:clamp(calc(var(--u) * 6.5157), calc((100svh - var(--bar-h) - var(--top-h) - 14px - var(--u) * 2.7662 - 40px) / .4252), calc(var(--u) * 8.3))}   /* never wider than the window (centre 4.1666u, so 8.3u just reaches both edges and all three tins stay in view) */
+  /* tall windows (portrait tablets): whatever free height is left after the mound is split, half of it moves the tiles and the headline down so the red area is not one empty block */
+  html[data-hero=C] #s2{--vo:clamp(0px, calc((100svh - var(--bar-h) - var(--top-h) - 14px - var(--u) * 2.7662 - var(--mW) * .4252 - 40px) * .5), 220px); padding-top:calc(var(--bar-h) + var(--top-h) + 14px + var(--vo))}
+  html[data-hero=C] .mtw{width:var(--mW); left:calc(var(--u) * 4.1666 - var(--mW) / 2)}
+  html[data-hero=C] .fx{clip-path:inset(-5000px -5000px calc(var(--u) * 0.2338 + var(--mW) * 0.0727 + 84px) -5000px)}
+  html[data-hero=C] .hbx{position:absolute; left:calc(var(--u) * .35); top:calc(var(--bar-h) + var(--top-h) + 14px + var(--vo,0px) + var(--u) * .12); display:flex; flex-direction:column; align-items:flex-start; color:var(--paper-muted)}
   html[data-hero=C] .hbx .hl2{font-size:calc(var(--u) * .44)}   /* about the size of her blue frame */
   html[data-hero=C] .hbx .ld{margin-top:calc(var(--u) * .08); max-width:calc(var(--u) * 2.06)}
   html[data-hero=C] .hbx .cta4{margin-top:calc(var(--u) * .12)}
@@ -590,6 +604,9 @@ main{display:block}
 }
 @media (prefers-reduced-motion:reduce){.mfx,.cta4 svg{animation:none}}
 
+
+/* tablet (561-860): the ritual intro line used the phone's 12.5px */
+@media (min-width:561px) and (max-width:860px){ .hw-lede{font-size:14.5px; line-height:1.5; margin-top:12px} }
 
 /* ===== top bar as a floating strip (option 12, square corners): one cream strip holding logo, links, icons and the dark cart pill ===== */
 :root{--bar-h:68px}   /* slimmer bar: 52px strip + 8px above and below (was 68px + 16px) */
@@ -705,10 +722,13 @@ main{display:block}
   html[data-hero=C] #s2{display:flex; flex-direction:column; height:100vh; height:100svh; min-height:0}
   html[data-hero=C] .hlay{flex:1 1 0; min-height:0; display:flex; flex-direction:column}
   html[data-hero=C] .hbx{flex:none}
-  html[data-hero=C] .cvs{flex:1 1 0; min-height:130px; height:auto}
+  html[data-hero=C] .cvs{flex:1 1 0; min-height:150px; height:auto}
   html[data-hero=C] .mtc{container-type:size}
-  html[data-hero=C] #s2 .tiles{flex:none}
-  html[data-hero=C] .mtw{left:50%; translate:-50% 0; width:min(132%, 205cqh)}
+  html[data-hero=C] #s2 .tiles{flex:none; position:relative; z-index:2}   /* the Collection button always sits above the mountain */
+  html[data-hero=C] #s2{--u:min(25vw,100px)}   /* the headline and spacing stop growing on wide phones, so the mountain keeps its room */
+  /* the mountain is always at least the full width of the window. If the space under the headline is too short for it, it stays pinned to the top of that space and its lower part sinks behind the Collection button and the strip, so the tins are never cut and the button is never pushed out */
+  html[data-hero=C] .mtw{--W:max(100cqw, min(132cqw, 205cqh)); left:50%; translate:-50% 0; width:var(--W); bottom:min(-1cqh, calc(100cqh - var(--W) * .4543))}
+  @media (max-height:640px){ html[data-hero=C] .hbx .ld{display:none} html[data-hero=C] .hbx{padding-bottom:calc(var(--u) * .06)} }
   /* product windows: a smaller pack, so it does not fill the whole screen */
   .vis{inset-inline:15%; top:max(6px,19%)}
   /* about: the empty nav row above the headline is gone, so top and bottom space match */

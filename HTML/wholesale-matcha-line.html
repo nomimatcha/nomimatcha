@@ -196,7 +196,7 @@ svg.ch{width:14px; height:14px; flex:none; fill:none; stroke:currentColor; strok
 .t2 .tins .t-c{background-image:var(--tin-c); z-index:3}
 .t2 .tins .t-b{background-image:var(--tin-b); z-index:2; inset-inline-end:calc(var(--tw) * .72); bottom:calc(var(--tw) * -.04)}
 .t2 .tins .t-a{background-image:var(--tin-a); z-index:1; inset-inline-end:calc(var(--tw) * 1.44); bottom:calc(var(--tw) * .18)}
-@media (max-width:900px){ .t2 .hero{min-height:0; padding-bottom:calc(var(--tw,0px) + 0px)} .t2 .tins{--tw:clamp(104px,28vw,170px); inset-inline-end:auto; position:relative; justify-self:center; bottom:auto; margin-top:8px; margin-bottom:-60px} .t2 .hero{padding-bottom:0} }
+@media (max-width:640px){ .t2 .hero{min-height:0; padding-bottom:calc(var(--tw,0px) + 0px)} .t2 .tins{--tw:clamp(104px,28vw,170px); inset-inline-end:auto; position:relative; justify-self:center; bottom:auto; margin-top:8px; margin-bottom:-60px} .t2 .hero{padding-bottom:0} }
 
 
 /* dropdown in the site's language (replaces the system menu) */
@@ -473,7 +473,9 @@ body.on-red .burger svg{stroke:var(--ink)}
 @media (max-width:360px){ .drawer .panel a.row{font-size:17px; gap:10px} .drawer .dn{min-width:42px} .drawer .dk{font-size:12px} }
 
 /* phones: the tins stand fully above the first card (only their feet are tucked behind it), and a bit bigger */
-@media (max-width:900px){ .t2 .tins{--tw:clamp(120px,34vw,190px); margin-bottom:0} }
+@media (max-width:640px){ .t2 .tins{--tw:clamp(120px,34vw,190px); margin-bottom:0; height:calc(var(--th) + var(--tw) * .2)} }
+/* tablet (641-900): the same arrangement as the desktop, text on one side and the tins rising out of the ticket on the other; the tins just get a little smaller so the buttons never run into them */
+@media (min-width:641px) and (max-width:900px){ .t2 .tins{--tw:clamp(100px,15vw,150px); inset-inline-end:clamp(16px,4vw,40px)} .t2 .hero{padding-bottom:84px} }   /* room under the buttons for the ticket that overlaps the hero by 58px */
 </style>
 
 <style id="sx-css">
