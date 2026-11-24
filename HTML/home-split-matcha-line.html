@@ -1505,6 +1505,11 @@ html.still #cxo .cx-pn{transition:none}
 #s2{--H:calc(100svh - var(--nav) - var(--strip)); --W:55vw; --k:calc((max(100svh,680px) - var(--top-h) - var(--strip)) * .2126)}
 #s2 .sun span{transform:skewX(-12deg)}
 html[dir=rtl] #s2 .sun span{transform:none}
+/* the wordmark starts where the leaning headline starts: the top-left of the Y is about .18em in from the box edge (same sizes as .hl2 on desktop and phones; Hebrew is not skewed) */
+#s2 .sx{--hfs:clamp(44px,min(7vw,11.8svh),120px)}
+@media (max-width:640px){ #s2 .sx{--hfs:clamp(34px,10.6vw,44px)} }
+#s2 .sx .wm{margin-inline-start:calc(var(--hfs) * .18)}
+html[dir=rtl] #s2 .sx .wm{margin-inline-start:0}
 @media (min-width:641px) and (min-aspect-ratio:1001/1000){
   #s2 .sun{translate:none; left:calc(100% - var(--W)); top:calc(var(--top-h) - 1px); bottom:var(--strip); width:var(--W); height:auto; border-radius:0; clip-path:polygon(var(--k) 0,100% 0,100% 100%,0 100%); padding-top:calc(var(--nav) - var(--top-h) + 1px + var(--D) * .13)}
   html[dir=rtl] #s2 .sun{left:0; clip-path:polygon(0 0,calc(100% - var(--k)) 0,100% 100%,0 100%)}
