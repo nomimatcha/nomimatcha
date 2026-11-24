@@ -976,7 +976,8 @@ html[dir=rtl] #s2 .sx .hl2 span{transform:none}
   .hst-row{flex-direction:column; height:auto; border-inline:1.5px solid var(--ink)}
   .hst-s{flex:none; flex-direction:row; align-items:center; gap:14px; border-inline-end:0; border-bottom:1.5px solid var(--ink); padding:12px 14px; flex-wrap:wrap}
   .hst-s:first-child{border-inline-start:0} .hst-s:last-child{border-bottom:0}
-  .hst-vt{writing-mode:horizontal-tb; rotate:0deg; margin-top:0; font-size:20px}
+  .hst-vt{writing-mode:horizontal-tb; rotate:0deg; margin-top:0; font-size:20px; align-self:center; line-height:1}   /* number and title share one line */
+  .hst-n{line-height:1}
   .hst-s.on .hst-vt{display:none}
   .hst-th{margin-top:0; margin-inline-start:auto; width:44px}
   .hst-bd{flex:0 0 100%; flex-direction:column; text-align:center; padding:8px 0 10px}
@@ -1501,11 +1502,11 @@ html.still #cxo .cx-pn{transition:none}
 </style>
 <style id="hero-slant">
 /* ===== hero: slanted red panel (option 11). The edge leans like the headline (-12deg). ===== */
-#s2{--H:calc(100svh - var(--nav) - var(--strip)); --W:55vw; --k:calc(var(--H) * .2126)}
+#s2{--H:calc(100svh - var(--nav) - var(--strip)); --W:55vw; --k:calc((max(100svh,680px) - var(--top-h) - var(--strip)) * .2126)}
 #s2 .sun span{transform:skewX(-12deg)}
 html[dir=rtl] #s2 .sun span{transform:none}
 @media (min-width:641px) and (min-aspect-ratio:1001/1000){
-  #s2 .sun{translate:none; left:calc(100% - var(--W)); top:var(--nav); bottom:var(--strip); width:var(--W); height:auto; border-radius:0; clip-path:polygon(var(--k) 0,100% 0,100% 100%,0 100%); padding-top:calc(var(--D) * .13)}
+  #s2 .sun{translate:none; left:calc(100% - var(--W)); top:calc(var(--top-h) - 1px); bottom:var(--strip); width:var(--W); height:auto; border-radius:0; clip-path:polygon(var(--k) 0,100% 0,100% 100%,0 100%); padding-top:calc(var(--nav) - var(--top-h) + 1px + var(--D) * .13)}
   html[dir=rtl] #s2 .sun{left:0; clip-path:polygon(0 0,calc(100% - var(--k)) 0,100% 100%,0 100%)}
   #s2 .smw{left:73vw}
   html[dir=rtl] #s2 .smw{left:27vw}
@@ -2273,7 +2274,8 @@ io.observe(g);
   .ffa-n small{display:block; font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-muted)}
   .ffa-n strong{display:block; margin-top:3px; font-size:17px; letter-spacing:-.02em}
   .ffa-h .chv{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:10; stroke-linecap:square; flex:none; transition:rotate .25s}
-  :dir(rtl) .ffa-h .chv{transform:scaleX(-1)}
+  /* Hebrew: he.js already mirrors the arrow path, so the svg is not mirrored again; the open row turns it down (a left arrow turned the other way) */
+  :dir(rtl) .ffa-r.on .ffa-h .chv{rotate:-90deg}
   .ffa-r.on .ffa-h{background:var(--c); color:var(--paper)}
   .ffa-r.on .ffa-n small{color:rgba(255,254,251,.78)}
   .ffa-r.on .ffa-t{border-color:var(--c)}
