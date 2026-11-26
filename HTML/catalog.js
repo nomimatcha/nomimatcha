@@ -43,7 +43,7 @@ var LIST=[
    descHe:'צ׳ייוגי נו מוקשי היא מאצ׳ה עם נוכחות שמתאימה ליום יום במיוחד למי שרוצה טעם עשיר. צ׳ייוגי נו מוקשי זה בלנד שעבר הצללה עם מדפי טנה והתחיל הקטיף במהלך מאי.' },
 
  { id:2, n:'Zuiho', he:'זויהו', kj:'瑞鳳', kjFull:'瑞鳳', ty:'u', c:'red', box:2,
-   st:2, tin:null,
+   st:2, tin:'z',
    badge:'',
    tag:'Close to koicha', tagh:'מתקרבת לקוייצ׳ה',
    price:128, size:'30 g', sample:{price:true,size:true},
@@ -132,6 +132,28 @@ var TY={ u:{en:'Usucha',he:'אוסוצ׳ה',jp:'薄茶'}, k:{en:'Koicha',he:'ק�
   css+='}';
   var s=document.createElement('style'); s.id='nm-cat-vars'; s.textContent=css;
   (document.head||document.documentElement).appendChild(s);
+})();
+
+/* The real floor shadow of the box mockups (tools/box-mockups/shadow.py), on the home strip and the shop cards.
+   u = usucha cartons, k = the two koicha cartons. Only symmetric insets and background positions here:
+   he.js mirrors left/right for Hebrew, and the light in the photos must not flip. */
+(function(){
+  /* one picture per carton (1-6), so no two shadows are identical; 5 and 6 are the taller koicha cartons */
+  var css='.pc .bxs .bx{position:relative}'+
+    '.pc .im .bx::after{content:"";position:absolute;inset:0 -60% -20% -60%;pointer-events:none}';
+  for(var n=1;n<=6;n++){
+    var k=n>4;
+    /* home: painted from the picture area of the tile */
+    css+='.ff-th:nth-child('+n+') .ff-ta{background:url(media/products/box-shadow-'+n+'-home.webp) no-repeat '+
+           (k?'23.89% 114.3% / 156.67% 41%':'26.67% 116.5% / 166.15% 43.44%')+';background-origin:content-box}';
+    /* shop cards and sets: a layer around each box (the box itself is punched out of the shadow picture) */
+    css+='.pc .im .bx[style*="--b'+n+')"]::after{background:url(media/products/box-shadow-'+n+'.webp) no-repeat '+
+           (k?'73.36% 85.35% / 71.21% 34.17%':'78.66% 86.06% / 75.52% 36.2%')+'}';
+  }
+  /* home tiles are white at rest, the picked one too (its coloured name bar marks it); cream only on hover */
+  css+='.ff-band .ff-th,.ff-band .ff-th.on{background:var(--paper)}.ff-band .ff-th:hover{background:var(--paper-muted)}';
+  var st=document.createElement('style'); st.id='nm-box-shadow'; st.textContent=css;
+  (document.head||document.documentElement).appendChild(st);
 })();
 
 /* ---- Taste: the client's four dimensions, and the meter (option C: five cells + a small red stamp for + / ++) ---- */
