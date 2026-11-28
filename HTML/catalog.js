@@ -116,6 +116,13 @@ var LIST=[
    descHe:'אסהי נו מוקשי היא הטופ של הטופ: מאצ׳ה קוייצ׳ה באיכות קצה, וזה בהחלט מורגש. אסהי נו מוקשי היא בלנד שעבר הצללה עם מדפי טנה והתחיל קטיף בתחילת מאי. מה שמבדיל את אסהי מאחרים זה היותו קוייצ׳ה: העלים נקטפו מצמחי תה מבוגרים יותר, מה שנותן יותר אומאמי ומתיקות, גוף מלא ועשיר.' }
 ];
 
+/* Stock. Set soldOut:true on a matcha above when it runs out; every page follows.
+   To preview without editing the file: ?soldout=2  or  ?soldout=2,5  (the numbers are the ids). */
+(function(){
+  var q=/[?&]soldout=([\d,]+)/.exec(location.search); if(!q) return;
+  q[1].split(',').forEach(function(id){LIST.forEach(function(p){if(p.id===+id) p.soldOut=true})});
+})();
+
 var TY={ u:{en:'Usucha',he:'אוסוצ׳ה',jp:'薄茶'}, k:{en:'Koicha',he:'קוייצ׳ה',jp:'濃茶'} };
 
 /* Pictures of the two premium (koicha) matchas, taken from the packaging files (Premium boxes and cans).
@@ -205,6 +212,19 @@ function num(s){ s=String(s); var m=/^(\d+)(\+*)$/.exec(s); return m?{v:+m[1],pl
 
 function find(name){ for(var i=0;i<LIST.length;i++) if(LIST[i].n===name) return LIST[i]; return null; }
 
+/* what is inside each set (matcha ids). A set is sold out as soon as one of its matchas is. */
+var SETS={'Tasting trio':[1,2,3],'Starter ritual set':[1]};
+function soldOutIn(name){
+  var p=find(name); if(p) return p.soldOut?[p.n]:[];
+  return (SETS[name]||[]).map(function(id){return LIST[id-1]}).filter(function(x){return x.soldOut}).map(function(x){return x.n});
+}
+function isOut(name){ return soldOutIn(name).length>0; }
+(function(){
+  var s=document.createElement('style'); s.id='nm-so-css';
+  s.textContent='.nm-so{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border:1.5px solid #ce2527;border-radius:2px;background:#fffefb;color:#ce2527;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;line-height:1;white-space:nowrap}:lang(he) .nm-so{letter-spacing:0}#sxo .sx-rw.sx-off .sx-th{filter:grayscale(1);opacity:.42}#sxo .sx-rw.sx-off .sx-pr{opacity:.45}';
+  (document.head||document.documentElement).appendChild(s);
+})();
+
 /* entries for the search overlay (P list) */
 function search(){
   return LIST.map(function(p){
@@ -218,7 +238,7 @@ function search(){
 /* the matcha cards of the shop (D.m.items) */
 function shop(){
   return LIST.map(function(p){
-    return {pg:p.id,n:p.n,kj:p.kj,tr:TY[p.ty].en+' · '+p.tag,st:p.st,ty:p.ty,c:p.c,box:p.box,price:p.price,size:p.size,bd:p.badge||'',d:p.tag+'.'};
+    return {pg:p.id,n:p.n,kj:p.kj,tr:TY[p.ty].en+' · '+p.tag,st:p.st,ty:p.ty,c:p.c,box:p.box,out:!!p.soldOut,price:p.price,size:p.size,bd:p.badge||'',d:p.tag+'.'};
   });
 }
 
@@ -226,14 +246,45 @@ function shop(){
 function cart(extra){
   var o={};
   LIST.forEach(function(p){
-    o[p.n]={kj:p.kj,tr:TY[p.ty].en+' · '+p.tag,trh:TY[p.ty].he+' · '+p.tagh,ty:TY[p.ty].en,tyh:TY[p.ty].he,c:p.c,p:p.price,sz:p.size};
+    o[p.n]={kj:p.kj,tr:TY[p.ty].en+' · '+p.tag,trh:TY[p.ty].he+' · '+p.tagh,ty:TY[p.ty].en,tyh:TY[p.ty].he,c:p.c,p:p.price,sz:p.size,out:!!p.soldOut};
     if(p.box) o[p.n].box=p.box;
   });
-  for(var k in (extra||{})) o[k]=extra[k];
+  for(var k in (extra||{})){ o[k]=extra[k]; o[k].out=isOut(k); }
   return o;
 }
 
-window.NMCAT={ list:LIST, TODO:TODO, isTodo:isTodo, mark:mark, recipe:recipe, dims:DIMS, meter:meter, hasPlus:hasPlus, types:TY, find:find, num:num, search:search, cart:cart, shop:shop,
+/* ---- Sending failed. The developer calls NMCAT.sendFailed(form) when the server does not answer.
+   Preview: ?send=fail (contact and wholesale forms, footer), ?nl=fail (newsletter popup). What was typed stays. ---- */
+var SENDFAIL=/[?&](send|nl)=fail/.test(location.search);
+function sendFailed(form){
+  var host=form.classList.contains('f-form')?form.parentNode:form;
+  var old=host.querySelector('.nm-fail'); if(old) old.parentNode.removeChild(old);
+  var news=form.classList.contains('f-form')||form.classList.contains('nl-f');
+  var box=document.createElement('div'); box.className='nm-fail'; box.setAttribute('role','alert');
+  box.innerHTML='<b>'+(news?'We couldn\u2019t sign you up':'Your message didn\u2019t send')+'</b>'+
+    '<p>Nothing you typed was lost. Check your connection and try again.</p>'+
+    '<div><button type="button">Try again</button>'+(news?'':'<a href="mailto:hello@nomimatcha.co.il">Email us instead</a>')+'</div>';
+  if(host!==form) host.appendChild(box); else form.insertBefore(box,form.querySelector('.go,.send,.nl-go'));
+  box.querySelector('button').addEventListener('click',function(){
+    if(box.parentNode) box.parentNode.removeChild(box);
+    if(form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+  });
+  form.addEventListener('input',function(){ if(box.parentNode) box.parentNode.removeChild(box) },{once:true});
+}
+(function(){
+  var s=document.createElement('style'); s.id='nm-fail-css';
+  s.textContent='.nm-fail{grid-column:1/-1;border:1.5px solid #ce2527;border-radius:2px;background:#fffefb;color:#1a2c27;text-align:start}'
+   +'.nm-fail>b{display:block;padding:11px 14px;background:#ce2527;color:#fffefb;font-size:14px;font-weight:700;line-height:1.2}'
+   +'.nm-fail p{margin:0;padding:12px 14px 0;font-size:14.5px;line-height:1.4;color:#1a2c27}'
+   +'.nm-fail>div{display:flex;flex-wrap:wrap;gap:10px 22px;padding:12px 14px 14px}'
+   +'.nm-fail button,.nm-fail a{margin:0;padding:0;border:0;background:none;height:auto;width:auto;font:inherit;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:underline;text-underline-offset:4px;color:#1a2c27;cursor:pointer}'
+   +'.nm-fail button:hover,.nm-fail a:hover{color:#ce2527}'
+   +'.fnl .nm-fail{max-width:560px;margin-top:10px}'
+   +':lang(he) .nm-fail button,:lang(he) .nm-fail a{letter-spacing:0}';
+  (document.head||document.documentElement).appendChild(s);
+})();
+
+window.NMCAT={ SENDFAIL:SENDFAIL, sendFailed:sendFailed, isOut:isOut, soldOutIn:soldOutIn, list:LIST, TODO:TODO, isTodo:isTodo, mark:mark, recipe:recipe, dims:DIMS, meter:meter, hasPlus:hasPlus, types:TY, find:find, num:num, search:search, cart:cart, shop:shop,
   /* the three suggestions in an empty cart */
-  sug:['Chiyogi no Mukashi','Zuiho','Soho no Shiro'] };
+  sug:['Chiyogi no Mukashi','Zuiho','Soho no Shiro'].filter(function(n){return !find(n).soldOut}) };
 })();
